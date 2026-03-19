@@ -1,0 +1,67 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "System user (admin or employee)",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "name": { "type": "string" },
+        "email": { "type": "string" },
+        "role": { "type": "string", "enum": ["admin", "employee"] },
+        "faceDescriptor": { "type": "array", "items": { "type": "number" } },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "name", "email", "role"]
+    },
+    "Attendance": {
+      "title": "Attendance",
+      "description": "Attendance record for time in/out",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "userName": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "type": { "type": "string", "enum": ["in", "out"] },
+        "location": {
+          "type": "object",
+          "properties": {
+            "lat": { "type": "number" },
+            "lng": { "type": "number" }
+          }
+        },
+        "isWithinRange": { "type": "boolean" }
+      },
+      "required": ["uid", "userName", "timestamp", "type"]
+    },
+    "Settings": {
+      "title": "Settings",
+      "description": "Global system settings",
+      "type": "object",
+      "properties": {
+        "allowedLocation": {
+          "type": "object",
+          "properties": {
+            "lat": { "type": "number" },
+            "lng": { "type": "number" }
+          }
+        },
+        "allowedRadius": { "type": "number", "description": "Allowed radius in meters" }
+      }
+    }
+  },
+  "firestore": {
+    "/users/{uid}": {
+      "schema": "User",
+      "description": "User profiles"
+    },
+    "/attendance/{recordId}": {
+      "schema": "Attendance",
+      "description": "Attendance logs"
+    },
+    "/settings/global": {
+      "schema": "Settings",
+      "description": "System-wide settings"
+    }
+  }
+}

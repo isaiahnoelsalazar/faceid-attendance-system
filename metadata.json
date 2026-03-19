@@ -1,0 +1,8 @@
+{
+  "name": "FaceID Attendance System",
+  "description": "Employee and intern attendance system with face recognition and location-based lock.",
+  "requestFramePermissions": [
+    "camera",
+    "geolocation"
+  ]
+}
