@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { db } from '../firebase';
 import { collection, query, where, orderBy, onSnapshot, limit } from 'firebase/firestore';
-import { UserProfile, AttendanceRecord, logAttendance, getSettings } from '../services/dbService';
+import { UserProfile, AttendanceRecord, logAttendance, getSettings, handleFirestoreError, OperationType } from '../services/dbService';
 import { loadModels, getFaceDescriptor, compareFaces } from '../services/faceService';
 import { getCurrentLocation, calculateDistance } from '../services/locationService';
 import { toast } from 'react-hot-toast';
@@ -31,6 +31,8 @@ export default function EmployeeDashboard({ profile }: { profile: UserProfile })
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const records = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as AttendanceRecord));
       setHistory(records);
+    }, (error) => {
+      handleFirestoreError(error, OperationType.LIST, 'attendance');
     });
 
     return () => unsubscribe();

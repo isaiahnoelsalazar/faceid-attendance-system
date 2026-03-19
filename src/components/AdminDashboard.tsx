@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../firebase';
 import { collection, query, orderBy, onSnapshot, limit, getDocs } from 'firebase/firestore';
-import { UserProfile, AttendanceRecord, Settings, getSettings, saveSettings } from '../services/dbService';
+import { UserProfile, AttendanceRecord, Settings, getSettings, saveSettings, handleFirestoreError, OperationType } from '../services/dbService';
 import { toast } from 'react-hot-toast';
 import Layout from './Layout';
 import { ClipboardList, Download, Settings as SettingsIcon, MapPin, Users, Search, Filter, CheckCircle2, XCircle, Loader2 } from 'lucide-react';
@@ -21,6 +21,9 @@ export default function AdminDashboard({ profile }: { profile: UserProfile }) {
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const records = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as AttendanceRecord));
       setLogs(records);
+      setLoading(false);
+    }, (error) => {
+      handleFirestoreError(error, OperationType.LIST, 'attendance');
       setLoading(false);
     });
 

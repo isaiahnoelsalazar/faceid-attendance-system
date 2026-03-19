@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { auth, db } from './firebase';
 import { onAuthStateChanged, User as FirebaseUser } from 'firebase/auth';
 import { onSnapshot, doc } from 'firebase/firestore';
-import { UserProfile, saveUserProfile } from './services/dbService';
+import { getUserProfile, saveUserProfile, UserProfile, handleFirestoreError, OperationType } from './services/dbService';
 import { Toaster, toast } from 'react-hot-toast';
 import Login from './components/Login';
 import Register from './components/Register';
@@ -37,7 +37,7 @@ export default function App() {
           }
           setLoading(false);
         }, (error) => {
-          console.error("Error listening to profile:", error);
+          handleFirestoreError(error, OperationType.GET, `users/${firebaseUser.uid}`);
           setLoading(false);
         });
       } else {

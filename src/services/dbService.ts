@@ -29,7 +29,7 @@ export interface FirestoreErrorInfo {
   }
 }
 
-const handleFirestoreError = (error: unknown, operationType: OperationType, path: string | null) => {
+export const handleFirestoreError = (error: unknown, operationType: OperationType, path: string | null) => {
   const errInfo: FirestoreErrorInfo = {
     error: error instanceof Error ? error.message : String(error),
     authInfo: {
